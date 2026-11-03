@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-theme="steel">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="dragon" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="brand" href="#hero">
+      <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+        <path d="M4 22c4-10 10-2 14-8s8-6 10-4c-3 0-5 2-7 6s-7 10-13 8c-2-.6-3-1.2-4-2z" fill="url(#g)" />
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--a1)" /><stop offset="1" stop-color="var(--a2)" /></linearGradient></defs>
+      </svg>
+      <span data-i18n="hero.name"></span>
+    </a>
+    <nav class="links" id="nav-links"></nav>
+    <div class="controls">
+      <div class="swatches" role="group" id="themes"></div>
+      <button class="lang" id="lang" type="button">EN</button>
+    </div>
+  </header>
+
+  <!-- 所有區塊都由 app.js 依 content.js 產生；內容是空的區塊不會出現 -->
+  <main id="main"></main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

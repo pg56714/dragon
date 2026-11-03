@@ -1,0 +1,190 @@
+:root {
+  --bg: #04060a;
+  --text: #f4efe8;
+  --muted: #a39d94;
+  --line: rgba(255, 255, 255, 0.09);
+  --panel: rgba(14, 12, 16, 0.55);
+  --a1: #6aa6ff;
+  --a2: #ff8a3c;
+  --grad: linear-gradient(100deg, var(--a1), var(--a2));
+  --font: 'Inter Tight', 'Noto Sans TC', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --serif: 'Instrument Serif', 'Noto Serif TC', Georgia, serif; /* butane 的標題是高反差襯線字 */
+  color-scheme: dark;
+}
+[data-theme='ember'] { --bg: #07060a; --text: #f4efe8; --muted: #a39d94; --panel: rgba(14, 12, 16, 0.55); --a1: #ffb547; --a2: #ff4a1c; }
+[data-theme='jade'] { --bg: #040d0a; --text: #eaf5ef; --muted: #8fa89c; --panel: rgba(6, 18, 14, 0.55); --a1: #4ff0b0; --a2: #d9b45a; }
+[data-theme='aurora'] { --bg: #07061a; --text: #efedff; --muted: #9b97c0; --panel: rgba(12, 10, 32, 0.55); --a1: #2fe4ff; --a2: #a066ff; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.6s;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+
+#dragon { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; display: block; }
+.vignette {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 45%, transparent 55%, var(--bg) 100%);
+  transition: background 0.6s;
+}
+main, .contact, .nav { position: relative; z-index: 2; }
+/* 一層極細的顆粒，畫面比較有質感 */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.06; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* nav */
+.nav {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+  width: min(1100px, calc(100% - 32px));
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 10px 12px 10px 18px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  z-index: 10;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+.links { display: flex; gap: 26px; font-size: 14px; color: var(--muted); }
+.links a { position: relative; transition: color 0.3s; }
+.links a:hover, .links a.active { color: var(--text); }
+.links a.active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px; background: var(--grad); }
+.controls { display: flex; align-items: center; gap: 10px; }
+.swatches { display: flex; gap: 6px; }
+.swatch {
+  width: 22px; height: 22px; border-radius: 50%; padding: 0; cursor: pointer;
+  border: 2px solid transparent; outline: 1px solid var(--line);
+  background: linear-gradient(135deg, var(--s1), var(--s2));
+  transition: transform 0.2s, border-color 0.2s;
+}
+.swatch:hover { transform: scale(1.12); }
+.swatch[aria-pressed='true'] { border-color: var(--text); }
+.lang {
+  font: 500 12px var(--mono); color: var(--text); cursor: pointer;
+  border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.lang:hover { background: rgba(255, 255, 255, 0.1); }
+
+/* shared */
+section, .contact { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
+.kicker { font: 500 12px var(--mono); letter-spacing: 0.18em; text-transform: uppercase; color: var(--a1); margin: 0 0 14px; }
+h1, h2 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; line-height: 1.02; margin: 0; }
+h2 { font-size: clamp(32px, 5vw, 60px); margin-bottom: 28px; }
+:lang(zh-Hant) h1, :lang(zh-Hant) h2 { letter-spacing: 0.02em; font-weight: 500; line-height: 1.2; }
+:lang(zh-Hant) .hero h1 { max-width: 11em; }
+.lead { font-size: clamp(17px, 2vw, 21px); color: var(--muted); max-width: 720px; margin: 0; }
+.panel {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 22px;
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+}
+
+.btn {
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 13px 24px; border-radius: 999px; font-weight: 500; font-size: 15px;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.btn.primary { background: var(--grad); color: #0b0a0c; box-shadow: 0 8px 40px -8px color-mix(in srgb, var(--a2) 70%, transparent); }
+.btn.primary i { font-style: normal; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: rgba(0, 0, 0, 0.85); color: var(--a1); }
+.btn.ghost { border: 1px solid var(--line); background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); }
+.btn:hover { transform: translateY(-2px); }
+.btn::after {
+  content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg); transition: left 0.6s ease;
+}
+.btn:hover::after { left: 120%; }
+
+/* hero */
+.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; padding-top: 24vh; }
+/* 首頁的字放在玻璃卡片裡（跟製作過程的卡片同一種），疊在下方旋轉的波浪上 */
+.hero-card { padding: 44px 56px; max-width: min(640px, 92%); align-items: center; }
+.hero-card .eyebrow:empty, .hero-card .sub:empty { display: none; }
+.hero-card h1 { margin-bottom: 28px; }
+.eyebrow { font: 500 13px var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 0 0 22px; }
+.hero h1 { font-size: clamp(42px, 7.4vw, 96px); max-width: 15ch; text-wrap: balance; text-shadow: 0 4px 40px rgba(0, 0, 0, 0.6); }
+.hero .sub { max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); color: var(--muted); margin: 24px 0 34px; text-shadow: 0 2px 20px var(--bg); }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+/* screens：形象頁的大字屏 */
+.screen { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10vh 0; }
+/* roadmap 屏：標題在上，卡片一排一張左右交錯，龍在卡片後面左右蛇行往下 */
+.screen[data-pose='roadmap'] { display: block; position: relative; padding: 14vh 0 10vh; }
+.screen[data-pose='roadmap'] > * { opacity: 1; transform: none; }
+.roadmap-head { text-align: center; }
+.roadmap { list-style: none; margin: 4vh 0 0; padding: 0; }
+.roadmap li { height: 42vh; display: flex; align-items: center; }
+.roadmap li.left { justify-content: flex-start; }
+.roadmap li.right { justify-content: flex-end; }
+.roadmap .card { width: min(420px, 44%); min-height: 170px; text-align: left; }
+.roadmap .card time { font: 400 13px var(--mono); color: var(--a1); }
+.roadmap .card h3 { margin: 6px 0 8px; font-size: 22px; font-weight: 500; }
+@media (max-width: 860px) { .roadmap .card { width: 80%; } }
+/* 轉場屏縮成分隔帶：龍橫在中間，不放內容 */
+.screen[data-pose='helix2'], .screen[data-pose='bwave'], .screen[data-pose='cross'] { min-height: 65vh; padding: 0; }
+/* 內容屏：龍在右側（peek）時，內容靠左 */
+.screen[data-pose='peek'] { align-items: flex-start; text-align: left; }
+/* 文字擺在拱門裡面 */
+.screen[data-pose='arch'] { padding-top: 26vh; }
+.contact[data-pose='ribbonArch'] { justify-content: center; padding-top: 8vh; padding-bottom: 0; } /* 頁尾的字放在絲帶拱門正中 */
+.screen .num { font: 500 13px var(--mono); color: var(--a1); letter-spacing: 0.2em; }
+.screen .big { font-size: clamp(72px, 13vw, 200px); font-weight: 400; margin: 10px 0 18px; background: linear-gradient(180deg, var(--text) 40%, color-mix(in srgb, var(--text) 35%, transparent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.screen .lead { max-width: 30ch; }
+.screen > * { opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
+.screen.in > * { opacity: 1; transform: none; }
+.screen.in > :nth-child(2) { transition-delay: 0.1s; }
+.screen.in > :nth-child(3) { transition-delay: 0.2s; }
+
+/* 姿勢總覽 */
+.screen.gallery { border-top: 1px dashed var(--line); justify-content: flex-start; align-items: flex-start; padding-top: 90px; }
+.screen.gallery > * { opacity: 1; transform: none; }
+.gallery-label { font: 500 15px var(--font); color: var(--text); background: color-mix(in srgb, var(--bg) 70%, transparent); padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); margin: 0; }
+.gallery-label b { font-family: var(--mono); color: var(--a1); margin-right: 6px; }
+
+/* 卡片（首頁、製作過程） */
+.card { padding: 28px; display: flex; flex-direction: column; gap: 14px; transition: transform 0.3s, border-color 0.3s; }
+.card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--a1) 45%, transparent); }
+.card h3 { margin: 0; font: 500 20px var(--mono); }
+.card p { margin: 0; color: var(--muted); font-size: 15px; flex: 1; }
+
+/* contact */
+.contact { min-height: 100vh; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; padding-top: 18vh; }
+.contact h2 { font-size: clamp(44px, 8vw, 110px); margin-bottom: 18px; }
+.contact .sub { color: var(--muted); margin: 0 0 32px; }
+.contact .kicker:empty, .contact .sub:empty { display: none; }
+.footbar {
+  position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 0 24px; border-top: 1px solid var(--line); font: 400 12px var(--mono); color: var(--muted);
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--bg) 85%, transparent) 40%); /* 拱門的腳經過時字還讀得到 */
+}
+.footbar a:hover { color: var(--text); }
+
+/* reveal */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.9s ease, transform 0.9s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+@media (max-width: 860px) {
+  .links { display: none; }
+}
+@media (max-width: 520px) {
+  .nav { padding-left: 14px; }
+  .brand span { display: none; }
+  .hero { padding-top: 120px; }
+  .card { padding: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal, .screen > * { transition: none; opacity: 1; transform: none; }
+}
