@@ -153,3 +153,5 @@ render();
 
 // 字型載入後區塊高度可能改變，龍要依新高度重排
 document.fonts?.ready.then(() => dragon?.attach([...document.querySelectorAll('[data-pose]')]));
+// 樣式表、圖片都載完後再排一次（線上網路慢時，第一次排版量到的高度可能還不對）
+window.addEventListener('load', () => dragon?.attach([...document.querySelectorAll('[data-pose]')]));

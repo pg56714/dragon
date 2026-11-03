@@ -476,6 +476,12 @@ export function createDragon(canvas, themeKey) {
       }
       curve.arcLengthDivisions = 800;
       const L = curve.getLength();
+      // 版面還沒排好（例如樣式表或字型還在載入）時量到的位置可能是壞的：這次先不畫，等版面排好再重建
+      if (!(L > 0) || !Number.isFinite(L)) {
+        count = 0;
+        if (coins) { coins.count = 0; core.count = 0; }
+        return;
+      }
       const r = def.r * VH * (aspect < 0.8 ? 0.75 : 1);
       let gap = ((TAU * r) / PER) * 0.7;
       const size = ((TAU * r) / PER) * 0.95;
@@ -568,7 +574,7 @@ export function createDragon(canvas, themeKey) {
       update: def.spin ? (t) => build(t, true) : null,
       depthK: (CAM_Z - (def.depth || 0)) / CAM_Z, // 裁切線依物件深度換算，才會剛好對齊區塊邊界
       drift: def.drift || 0, // 捲過時整條橫移的量（區塊從畫面中間每移動一個視窗高，橫移幾個螢幕半寬）
-      dispose() { geo.dispose(); coins.dispose(); core.dispose(); scaleMat.dispose(); coreMat.dispose(); },
+      dispose() { geo?.dispose(); coins?.dispose(); core?.dispose(); scaleMat.dispose(); coreMat.dispose(); },
     };
   }
 
@@ -582,7 +588,7 @@ export function createDragon(canvas, themeKey) {
         p.el = el;
         scene.add(p.group);
         pieces.push(p);
-        p.build();
+        try { p.build(); } catch (err) { console.warn('dragon piece build failed', el.dataset.pose, err); } // 一段出錯不影響其他段
       }
     }
   }
